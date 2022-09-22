@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "kitaichi",
+  "private_key_id": "fd2dd716665b2ae2d8ccdfa1442dbf6932cb436c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCW8zK6bxC+lMbb\nhG0oqKQT4oXDcWPUdnEiGGYscSz6yHjg4PXlsK9YyL3b4r8Jmt3jDcL+cl0wwR35\nyO5DgDaOhPF5sWyax9DAj878OlnxkJeBQNGFvczkp751xWmqrzpZyq1AfenpjXJZ\n91zZRPTUwcxnjEUCLhuE+hAa8Ku/KJfdvxt7QWjdF/s/XRzGI+DuXqaadNJ6oxIx\nWx9P9Y8MrtlaJn7hTh7BCPGIbMPbQGhm4YcDTVlI6gSeYEI0xra+cBOEV+2TrbzQ\nltrz4jLhTw3if7upUpdqMAu3bVOS1pEE8BejKg0yi5q7xLPOr2m0oLhq3h0nikPi\nycNXzNRtAgMBAAECggEAAxnzEF6IzwmaflcdsQip+licm/Pf87UNRQCQVNhsbqig\nxyoIE1SKfb3+HJ7vguCCL5CQUY8C+CX3mjK1JoDjXhFALtpk21dApDwwKgF+6JYq\nbrbotyE7rPT/VkcckSuxfLfL0Hflzu0fjNamuzYN+7MRoo0Au/c7jINgwlTwimhg\nhfjfD//uqdHgP9UXCEWmThncPt8adnrQLIILnaBTcTyFSydP9xmCk4yRZYm9dEH1\nSoJ/l/4p1W8MknqBZbVx3AskHPYx1EjW9he/CU/LR6FL999VjGcDNLKqRdWasuVn\nakmRE7BLICPxfOiywZFjuMjVQuxVOGvbyo0GkQgdkQKBgQDJBDOuDhULZSOkartu\nnGBbJSb+R7BfD3BNFSh0aBhD6l50PZ5ST52kGLKNIhhwcFKp12jRck31zjm6sL/K\ncDfA++E4QViXMB5yt7AkY2qBDL1dBkGAiLIpL6Kh2g97VXEftjmQ5O9cKds/wxsh\nevRyMmmGB31CntUbPeVMPsjGaQKBgQDAPTBaJ03kBwOhglbMOo4VYD0ClmJ5ZE0q\n9GuuS5hEFnA8G179b3jVtwtmL4xRhFOkC2BamCxis0W5VbRDoi0hA91xP7TxuRUv\nHNq1+6JDw4ngjIY1F/bqbwz9x7dKgN7G04RcG2n46a+SCjaccrFPgJbR2i/eqxrV\ne5NbCzKFZQKBgANM4lxVNts9CdzFM9aZEqvsbDt4idjFtB5P3p4qp1tWGb7m1Bad\n4AS1sxjGGoieD31iYAIwUj9a52+9PyjftsqgWA5IZF/3Fkjj4yx1xWXhA6rnU2P8\n2o/6jD0EC4UG3hibMU7Ds3pb5ZGibmuaTTEiysC8lr3lRbJwzbb2wO0hAoGAPp3v\nuP3idir+uMX+xckw7K+LT+NyMf5E0IAK7xv6ffsdFccImt6LanmUAfXs68SBhgaa\nnQfCNWgVhvfunrUdpAphP/kzVCUoTE9Gwk4znYT8zSKYuISUzencPnGmN2NgrTzK\neUIIs6ZSpOwku7L0JGRLPBGo1AvB0tXMurQcAa0CgYA4LjAiUDaA29LEHssXGg6N\nQH4dptjDsFj0MQNjXq7jt1n/lJ1Gf+bJZrSjurnCLqc60TJQBmH7ifk4LItOP+MQ\nW1qYWF+QawmPLo49qKbhr0i4bSB+vQSK+fJAQhTvYJYQnwlLwzZW1vB/O3/Sg0N8\ntxVduqIT0uwMndveyaqYrQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "kitaichi@kitaichi.iam.gserviceaccount.com",
+  "client_id": "107467557561185494811",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kitaichi%40kitaichi.iam.gserviceaccount.com"
+}

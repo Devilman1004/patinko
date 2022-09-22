@@ -2,26 +2,16 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from PIL import Image
-st.title('Streamlit 超入門')
 
-st.write('Display Imag')
+st.title('パチンコ・パチスロ期待値稼働')
 
-condtion = st.sidebar.slider('あなたの今の調子は？',0,10,5)
+st.text_input('機種名')
+st.number_input('ゲーム数',0,2000)
 
-'コンディション', condtion
+st.number_input('投資金額',0,1000000)
+st.number_input('投資メダル枚数',0,1000000)
+st.number_input('投資玉数',0,1000000)
 
-
-option = st.sidebar.text_input('あなたの趣味を教えてください')
-
-'あなたの好きな趣味は、',option,'です'
-
-option = st.selectbox(
-    'あなたが好きな数字をいれてください',
-    list(range(1,11))
-)
-
-'あなたの好きな数字は、',option,'です'
-if st.checkbox('Show Image'):
-    img = Image.open('../img/1204350-2.jpg')
-    st.image(img,caption='Ero',use_column_width=True)
-
+st.number_input('収入金額',0,1000000)
+st.number_input('収入メダル枚数',0,1000000)
+st.number_input('収入玉数',0,1000000)
