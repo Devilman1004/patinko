@@ -2,16 +2,55 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from PIL import Image
+import gspread
+import json
+import pandas as pd
+#ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
+from oauth2client.service_account import ServiceAccountCredentials
+
+#2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+json_path = 'E://Patinko//App//kitaichi-fd2dd716665b.json'
+#認証情報設定
+#ダウンロードしたjsonファイル名をクレデンシャル変数に設定（秘密鍵、Pythonファイルから読み込みしやすい位置に置く）
+credentials = ServiceAccountCredentials.from_json_keyfile_name(json_path, scope)
+#OAuth2の資格情報を使用してGoogle APIにログインします。
+gc = gspread.authorize(credentials)
+# １．ファイル名を指定してワークブックを選択
+workbook = gc.open('収支表')
+worksheet = workbook.worksheet('機種_1')
+df = pd.DataFrame(worksheet.get_all_values()[1:], columns=worksheet.get_all_values()[0]).set_index('開始')
+df['期待値'] = df['期待値'].astype('int')
 
 st.title('パチンコ・パチスロ期待値稼働')
 
-st.text_input('機種名')
-st.number_input('ゲーム数',0,2000)
 
-st.number_input('投資金額',0,1000000)
-st.number_input('投資メダル枚数',0,1000000)
-st.number_input('投資玉数',0,1000000)
+left,right=st.columns(2)
 
-st.number_input('収入金額',0,1000000)
-st.number_input('収入メダル枚数',0,1000000)
-st.number_input('収入玉数',0,1000000)
+left.text_input('機種名')
+game_len = right.number_input('ゲーム数',0,2000)
+
+left,center,right=st.columns(3)
+
+left.number_input('投資金額',0,1000000)
+center.number_input('投資メダル枚数',0,1000000)
+right.number_input('投資玉数',0,1000000)
+
+#st.number_input('投資金額',0,1000000)
+#st.number_input('投資メダル枚数',0,1000000)
+#st.number_input('投資玉数',0,1000000)
+
+left.number_input('収入金額',0,1000000)
+center.number_input('収入メダル枚数',0,1000000)
+right.number_input('収入玉数',0,1000000)
+
+kitaichi = 0
+for i in range(len(list(df.index))):
+    if list(df.index)[i] == game_len:
+        kitaichi = df.iloc[i,0]
+        break
+
+left,right=st.columns(2)
+left.text(str(game_len) + 'であれば')
+left.text(str(kitaichi) + 'です')
+right.dataframe(df)
