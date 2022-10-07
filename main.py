@@ -31,26 +31,3 @@ left.text_input('機種名')
 game_len = right.number_input('ゲーム数',0,2000)
 
 left,center,right=st.columns(3)
-
-left.number_input('投資金額',0,1000000)
-center.number_input('投資メダル枚数',0,1000000)
-right.number_input('投資玉数',0,1000000)
-
-#st.number_input('投資金額',0,1000000)
-#st.number_input('投資メダル枚数',0,1000000)
-#st.number_input('投資玉数',0,1000000)
-
-left.number_input('収入金額',0,1000000)
-center.number_input('収入メダル枚数',0,1000000)
-right.number_input('収入玉数',0,1000000)
-
-kitaichi = 0
-for i in range(len(list(df.index))):
-    if list(df.index)[i] == game_len:
-        kitaichi = df.iloc[i,0]
-        break
-
-left,right=st.columns(2)
-left.text(str(game_len) + 'であれば')
-left.text(str(kitaichi) + 'です')
-right.dataframe(df)
