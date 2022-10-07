@@ -18,7 +18,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(json_path, scope)
 gc = gspread.authorize(credentials)
 # １．ファイル名を指定してワークブックを選択
 workbook = gc.open('収支表')
-worksheet = workbook.worksheet('機種_1')
+worksheet = workbook.worksheet('S_1')
 df = pd.DataFrame(worksheet.get_all_values()[1:], columns=worksheet.get_all_values()[0]).set_index('開始')
 df['期待値'] = df['期待値'].astype('int')
 
