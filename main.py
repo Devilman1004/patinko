@@ -18,16 +18,40 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(json_path, scope)
 gc = gspread.authorize(credentials)
 # １．ファイル名を指定してワークブックを選択
 workbook = gc.open('収支表')
-worksheet = workbook.worksheet('S_1')
-df = pd.DataFrame(worksheet.get_all_values()[1:], columns=worksheet.get_all_values()[0]).set_index('開始')
-df['期待値'] = df['期待値'].astype('int')
+sh_secchi = workbook.worksheet('設置一覧')
+sh_shop = workbook.worksheet('店一覧')
+sh_slot_kisyu = workbook.worksheet('スロット機種一覧')
+df_secchi = pd.DataFrame(sh_secchi.get_all_values()[1:], columns=sh_secchi.get_all_values()[0])
+df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns=sh_shop.get_all_values()[0])
+df_slot_kisyu = pd.DataFrame(sh_slot_kisyu.get_all_values()[1:], columns=sh_slot_kisyu.get_all_values()[0])
+
 
 st.title('パチンコ・パチスロ期待値稼働')
 
+shop_name = st.selectbox(
+    '店名',
+    tuple(df_shop['店名'])
+    )
 
-left,right=st.columns(2)
+shop_num = list(df_shop['店番号'])[(list(df_shop['店名']).index(shop_name))]
 
-left.text_input('機種名')
-game_len = right.number_input('ゲーム数',0,2000)
+shop_df = df_secchi[df_secchi['店番号'] == shop_num]
 
-left,center,right=st.columns(3)
+dai_number = st.selectbox(
+    '台番号',
+    tuple(shop_df['台番号'])
+    )
+
+kisyu_num = shop_df['機種番号'][list(shop_df['台番号']).index(dai_number)]
+
+kisyu_name = df_slot_kisyu['機種名'][list(df_slot_kisyu['機種番号']).index(kisyu_num)]
+
+st.text_input('機種名',kisyu_name)
+
+kisyu_df = df_slot_kisyu[df_slot_kisyu['機種名'] == kisyu_name]
+
+st.dataframe(kisyu_df)
+
+#st.text('メーカー:' + kisyu_df.iloc[])
+
+game_len = st.number_input('ゲーム数',0,2000)
