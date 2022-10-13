@@ -48,10 +48,15 @@ kisyu_name = df_slot_kisyu['機種名'][list(df_slot_kisyu['機種番号']).inde
 
 st.text_input('機種名',kisyu_name)
 
-kisyu_df = df_slot_kisyu[df_slot_kisyu['機種名'] == kisyu_name]
+kisyu_df = df_slot_kisyu[df_slot_kisyu['機種名'] == kisyu_name].set_index('機種番号')
 
-st.dataframe(kisyu_df)
+st.text('メーカー：' + kisyu_df.loc[kisyu_num,'メーカー'])
+st.text('タイプ：' + kisyu_df.loc[kisyu_num,'タイプ'])
+st.text('５０枚あたり：' + kisyu_df.loc[kisyu_num,'コイン持ち'])
+st.text('天井ゲーム数：' + kisyu_df.loc[kisyu_num,'天井'])
+st.text('純増：' + kisyu_df.loc[kisyu_num,'純増'])
 
+st.image('./images/sammy-rump.jpg')
 #st.text('メーカー:' + kisyu_df.iloc[])
 
 game_len = st.number_input('ゲーム数',0,2000)
