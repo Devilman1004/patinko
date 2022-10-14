@@ -26,7 +26,7 @@ df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns=sh_shop.get_all_val
 df_slot_kisyu = pd.DataFrame(sh_slot_kisyu.get_all_values()[1:], columns=sh_slot_kisyu.get_all_values()[0])
 
 
-st.title('パチンコ・パチスロ期待値稼働')
+st.title('期待値稼働')
 
 shop_name = st.selectbox(
     '店名',
