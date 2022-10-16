@@ -21,12 +21,14 @@ workbook = gc.open('収支表')
 sh_secchi = workbook.worksheet('設置一覧')
 sh_shop = workbook.worksheet('店一覧')
 sh_slot_kisyu = workbook.worksheet('スロット機種一覧')
+sh_kari = workbook.worksheet('シート7')
 df_secchi = pd.DataFrame(sh_secchi.get_all_values()[1:], columns=sh_secchi.get_all_values()[0])
 df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns=sh_shop.get_all_values()[0])
 df_slot_kisyu = pd.DataFrame(sh_slot_kisyu.get_all_values()[1:], columns=sh_slot_kisyu.get_all_values()[0])
-
+df_kari = pd.DataFrame(sh_kari.get_all_values()[1:], columns=sh_kari.get_all_values()[0])
 
 st.title('期待値稼働')
+
 
 shop_name = st.selectbox(
     '店名',
@@ -50,13 +52,28 @@ st.text_input('機種名',kisyu_name)
 
 kisyu_df = df_slot_kisyu[df_slot_kisyu['機種名'] == kisyu_name].set_index('機種番号')
 
-st.text('メーカー：' + kisyu_df.loc[kisyu_num,'メーカー'])
-st.text('タイプ：' + kisyu_df.loc[kisyu_num,'タイプ'])
-st.text('５０枚あたり：' + kisyu_df.loc[kisyu_num,'コイン持ち'])
-st.text('天井ゲーム数：' + kisyu_df.loc[kisyu_num,'天井'])
-st.text('純増：' + kisyu_df.loc[kisyu_num,'純増'])
-
-st.image('./images/sammy-rump.jpg')
-#st.text('メーカー:' + kisyu_df.iloc[])
-
 game_len = st.number_input('ゲーム数',0,2000)
+
+kisyu_df = df_kari[df_kari['機種番号'] == kisyu_num]
+
+tenzyo_df = kisyu_df[kisyu_df['カテゴリ'] == '天井狙い']
+
+game_list = list(tenzyo_df['項目'])
+kitaiti_list = list(tenzyo_df['内容'])
+
+st.text(kitaiti_list[game_list.index(str(game_len))]+'円')
+
+with st.sidebar:
+    kihon_df = kisyu_df[kisyu_df['カテゴリ'] == '基本情報'][['項目','内容']].set_index('項目')
+
+    st.table(kihon_df)
+
+    # st.text('メーカー：' + kisyu_df.loc[kisyu_num,'メーカー'])
+    # st.text('タイプ：' + kisyu_df.loc[kisyu_num,'タイプ'])
+    # st.text('５０枚あたり：' + kisyu_df.loc[kisyu_num,'コイン持ち'])
+    # st.text('天井ゲーム数：' + kisyu_df.loc[kisyu_num,'天井'])
+    # st.text('純増：' + kisyu_df.loc[kisyu_num,'純増'])
+
+    st.image('./images/sammy-rump.jpg')
+    #st.text('メーカー:' + kisyu_df.iloc[])
+
