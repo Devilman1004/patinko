@@ -36,8 +36,8 @@ st.subheader('・年収120万円')
 st.subheader('・月収10万円')
 st.subheader('・週収2万5000円')
 st.subheader('・日収3334円')
-st.header('◎　マイルール')
-st.subheader('・次の日が仕事だったら２１までには帰宅')
+# st.header('◎　マイルール')
+# st.subheader('・次の日が仕事だったら２１までには帰宅')
 
 st.header('打ち始め')
 with st.form(key='nyuryoku_form'):    

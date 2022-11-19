@@ -125,3 +125,18 @@ if kaiseki_submitted:
     st.dataframe(kouzyun_df)
 else:
     st.dataframe(st.session_state.df)
+
+with st.form("kitaichi_form",True):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        through_name = st.selectbox('スルー回数',('0', '1', '2', '3', '4', '5', '6', '7'))
+    with col2:
+        game_name = st.selectbox('現在のゲーム数',('0', '50', '100', '150', '200', '250', '300', '350', '400', '450', '500', '550', '600'))
+    with col3:
+        samai_name = st.selectbox('差枚数',('500', '400', '300', '200', '100', '0', '-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800', '-900', '-1000', '-1100', '-1200', '-1300', '-1400', '-1500', '-1600', '-1700', '-1800', '-1900', '-2000', '-2100', '-2200', '-2300', '-2400', '-2500', '-2600', '-2700', '-2800', '-2900', '-3000'))
+    
+    kitaichi_submitted = st.form_submit_button("入力")
+    if kitaichi_submitted:
+        filename = 'data/' + through_name + '_' + game_name + '_' + samai_name + '.csv'
+        kitaichi_df = pd.read_csv(filename, index_col=0)
+        st.dataframe(kitaichi_df)
