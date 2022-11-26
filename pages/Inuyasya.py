@@ -56,6 +56,28 @@ elif mode == 'レギュラーボーナス':
         if submitted:
             st.session_state.df = tanpatsu(st.session_state.df,RB_g_len,RB_get_len)
 
+if not list(st.session_state.df.index)==[]:
+    with st.form("syusei",True):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                index_num = st.selectbox('インデックス番号',tuple(st.session_state.df.index))
+            with col2:
+                columns_name = st.selectbox('行名',tuple(st.session_state.df.columns))
+            with col3:
+                syusei_naiyou = st.text_input('修正内容')
+            
+            submitted_syusei = st.form_submit_button("修正")
+            if submitted_syusei:
+                st.session_state.df.loc[index_num,columns_name] = syusei_naiyou
+
+if not list(st.session_state.df.index)==[]:
+    with st.form("sakuzyo",True):
+        index_num = st.selectbox('インデックス番号',tuple(st.session_state.df.index))
+    
+        submitted_syusei = st.form_submit_button("削除")
+        if submitted_syusei:
+            st.session_state.df.drop(index=index_num,inplace=True)
+
 kaiseki_submitted = st.button("解析")
 
 if kaiseki_submitted:
