@@ -159,6 +159,7 @@ with st.form("kitaichi_form",True):
     
     kitaichi_submitted = st.form_submit_button("入力")
     if kitaichi_submitted:
+        st.text('スルー回数：'+ through_name + '回 現在のゲーム数：' + game_name + 'G 差枚数：' + samai_name + '枚')
         filename = 'data/Inuyasya/' + through_name + '_' + game_name + '_' + samai_name + '.csv'
         kitaichi_df = pd.read_csv(filename, index_col=0)
         st.dataframe(kitaichi_df)
