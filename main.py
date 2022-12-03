@@ -1,9 +1,6 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
-from PIL import Image
 import gspread
-import json
 import pandas as pd
 #ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
 from oauth2client.service_account import ServiceAccountCredentials
@@ -29,7 +26,15 @@ st.dataframe(df.tail(5))
 
 st.header('打ち始め')
 with st.form(key='start_form'):    
-    shop_name = st.text_input('店名')
+    shop_name = st.selectbox('店名',('ダイナム宇部港町店',
+                                        'ダイナム小郡店',
+                                        'メガガイア小郡店',
+                                        'RITZ 新山口店',
+                                        'ダイナム阿知須店',
+                                        'テキサス山口店',
+                                        'ピー・パーク',
+                                        'ＶＩＰ山口店',
+                                        'プレイランドエイト'))
     dai_number = st.number_input('台番号',0,10000)
     kisyu_name = st.text_input('機種名')
     game_len = st.number_input('開始ゲーム数',0,2000)
@@ -108,7 +113,7 @@ with st.form(key='yugi_form'):
 
 st.header('結果')
 with st.form(key='kekka_form'):
-    hyaku_mai_len = st.number_input('交換枚数')
+    hyaku_mai_len = st.number_input('交換枚数', min_value=0.0, value=5.0, step=0.1,)
     kaisyu_medal = st.number_input('回収メダル枚数',0,20000)
     
     kekka_touroku_buton = st.form_submit_button('登録')
