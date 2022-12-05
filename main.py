@@ -38,7 +38,7 @@ with st.form(key='start_form'):
     dai_number = st.number_input('台番号',0,10000)
     kisyu_name = st.text_input('機種名')
     game_len = st.number_input('開始ゲーム数',0,2000)
-    kitaiti = st.number_input('期待値',0,50000)
+    kitaiti = st.number_input('期待値',-50000,50000)
     touroku_buton = st.form_submit_button('登録')
     if touroku_buton: 
         if list(df.index)==[]:
