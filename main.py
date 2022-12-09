@@ -18,7 +18,11 @@ gc = gspread.authorize(credentials)
 # １．ファイル名を指定してワークブックを選択
 workbook = gc.open('収支表')
 sh = workbook.worksheet('収支')
-df = pd.DataFrame(sh.get_all_values()[1:], columns=sh.get_all_values()[0])
+sh_shop = workbook.worksheet('店一覧')
+sh_slot = workbook.worksheet('スロット機種一覧')
+df = pd.DataFrame(sh.get_all_values()[1:], columns = sh.get_all_values()[0])
+df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns = sh_shop.get_all_values()[0])
+df_slot = pd.DataFrame(sh_slot.get_all_values()[1:], columns = sh_slot.get_all_values()[0])
 
 st.title('期待値稼働')
 
@@ -26,17 +30,9 @@ st.dataframe(df.tail(5))
 
 st.header('打ち始め')
 with st.form(key='start_form'):    
-    shop_name = st.selectbox('店名',('ダイナム宇部港町店',
-                                        'ダイナム小郡店',
-                                        'メガガイア小郡店',
-                                        'RITZ 新山口店',
-                                        'ダイナム阿知須店',
-                                        'テキサス山口店',
-                                        'ピー・パーク',
-                                        'ＶＩＰ山口店',
-                                        'プレイランドエイト'))
+    shop_name = st.selectbox('店名',tuple(df_shop['店名']))
     dai_number = st.number_input('台番号',0,10000)
-    kisyu_name = st.text_input('機種名')
+    kisyu_name = st.selectbox('機種名',tuple(df_slot['機種名']))
     game_len = st.number_input('開始ゲーム数',0,2000)
     kitaiti = st.number_input('期待値',-50000,50000)
     touroku_buton = st.form_submit_button('登録')
@@ -68,8 +64,13 @@ with st.form(key='start_form'):
         
 st.header('遊技中')
 with st.form(key='yugi_form'):
-    sen_mai_len = st.number_input('1000円枚数',0,500,100)
-    push_mai_len = st.number_input('1プッシュ枚数',0,50,50)
+    index = int(list(df.index)[-1])
+    shop = df.loc[index,'店舗名']
+    
+    index_shop = list(df_shop['店名']).index(shop)
+    
+    sen_mai_len = st.number_input('1000円枚数',0,500,value = int(list(df_shop['交換率'])[index_shop]))
+    push_mai_len = st.number_input('1プッシュ枚数',0,50,value = int(list(df_shop['ワンプッシュ'])[index_shop]))
     push_col1, push_col2 = st.columns(2)
     with push_col1:
         genkin_push_number = st.number_input('現金プッシュ回数',0,100)
@@ -113,7 +114,12 @@ with st.form(key='yugi_form'):
 
 st.header('結果')
 with st.form(key='kekka_form'):
-    hyaku_mai_len = st.number_input('交換枚数', min_value=0.0, value=5.0, step=0.1,)
+    index = int(list(df.index)[-1])
+    shop = df.loc[index,'店舗名']
+    
+    index_shop = list(df_shop['店名']).index(shop)
+    
+    hyaku_mai_len = st.number_input('交換枚数', min_value=0.0, value = float(list(df_shop['換金率'])[index_shop]), step=0.1,)
     kaisyu_medal = st.number_input('回収メダル枚数',0,20000)
     
     kekka_touroku_buton = st.form_submit_button('登録')
