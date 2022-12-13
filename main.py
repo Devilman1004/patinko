@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import gspread
 import pandas as pd
 #ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
