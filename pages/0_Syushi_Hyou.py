@@ -16,16 +16,30 @@ workbook = gc.open('収支表')
 sh = workbook.worksheet('収支')
 df = pd.DataFrame(sh.get_all_values()[1:], columns = sh.get_all_values()[0])
 
+df = df.astype({'投資金額': int ,
+                '回収金額': int ,
+                '投資メダル枚数': int ,
+                '期待値': int ,
+                '回収メダル枚数': int , 
+                '回収金額': float ,
+                '収支金額': int ,
+                '収支メダル枚数': int})
 st.title('収支表')
 
-st.dataframe(df)
-
 st.header('生涯収支')
-st.subheader('期待値合計')
-st.text(str(sum([int(i) for i in list(df['期待値'])])) + '円')
-
-st.subheader('収支金額')
-st.text(str(sum([int(i) for i in list(df['収支金額'])])) + '円')
+ichiran = st.checkbox('一覧を表示')
+if ichiran:
+    st.dataframe(df)
+syougai_col1, syougai_col2, syougai_col3 = st.columns(3)
+with syougai_col1:
+    st.subheader('期待値合計')
+    st.text(str(sum([int(i) for i in list(df['期待値'])])) + '円')
+with syougai_col2:
+    st.subheader('収支金額')
+    st.text(str(sum([int(i) for i in list(df['収支金額'])])) + '円')
+with syougai_col3:
+    st.subheader('台数')
+    st.text(str(len(df.index)) + '台')
 
 days_list=[]
 day_list = list(set(df['年月日']))
