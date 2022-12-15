@@ -21,11 +21,10 @@ st.title('収支表')
 st.dataframe(df)
 
 st.header('生涯収支')
-
-st.text('期待値合計')
+st.subheader('期待値合計')
 st.text(sum([int(i) for i in list(df['期待値'])]))
 
-st.text('収支金額')
+st.subheader('収支金額')
 st.text(sum([int(i) for i in list(df['収支金額'])]))
 
 days_list=[]
@@ -50,5 +49,5 @@ for i in range(len(list(day_df['期待値']))):
     suii_list.append([list(day_df['年月日'])[i],kitaiti_sum,syushi_sum])
 suii_df = pd.DataFrame(suii_list,columns=['年月日','期待値','収支金額']).set_index('年月日')
 
-st.text('収支推移')
+st.subheader('収支推移')
 st.line_chart(suii_df)
