@@ -22,10 +22,10 @@ st.dataframe(df)
 
 st.header('生涯収支')
 st.subheader('期待値合計')
-st.text(sum([int(i) for i in list(df['期待値'])]))
+st.text(str(sum([int(i) for i in list(df['期待値'])])) + '円')
 
 st.subheader('収支金額')
-st.text(sum([int(i) for i in list(df['収支金額'])]))
+st.text(str(sum([int(i) for i in list(df['収支金額'])])) + '円')
 
 days_list=[]
 day_list = list(set(df['年月日']))
