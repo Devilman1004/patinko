@@ -25,15 +25,7 @@ df_slot = pd.DataFrame(sh_slot.get_all_values()[1:], columns = sh_slot.get_all_v
 
 st.title('期待値稼働')
 
-state_col1, state_col2, state_col3 = st.columns(3)
-with state_col1:
-    start = st.checkbox('打ち始め', value=True)
-with state_col2:
-    yugi = st.checkbox('遊技中')
-with state_col3:
-    end = st.checkbox('結果')
-
-if start:
+with st.expander("打ち始め"):
     st.header('打ち始め')
     with st.form(key='start_form'):    
         shop_name = st.selectbox('店名',tuple(df_shop['店名']))
@@ -78,8 +70,24 @@ if start:
      
      
      
-if yugi:
+with st.expander("遊技中"):
+    
     st.header('遊技中')
+    
+    if 'amari_mai_len' not in st.session_state:
+        st.session_state.amari_mai_len = 0
+    if 'genkin_push_number' not in st.session_state:
+        st.session_state.genkin_push_number = 0
+    if 'medal_push_number' not in st.session_state:
+        st.session_state.medal_push_number = 0
+    
+    push_col1, push_col2 = st.columns(2)
+    with push_col1:
+        st.session_state.genkin_push_number = st.number_input('現金プッシュ回数',0,100,st.session_state.genkin_push_number)
+    with push_col2:
+        st.session_state.medal_push_number = st.number_input('持ちメダルプッシュ回数',0,100,st.session_state.medal_push_number)
+    st.session_state.amari_mai_len = st.number_input('余り枚数',0,500,st.session_state.amari_mai_len)
+    
     with st.form(key='yugi_form'):
         index = int(list(df.index)[-1])
         shop = df.loc[index,'店舗名']
@@ -88,12 +96,6 @@ if yugi:
         
         sen_mai_len = st.number_input('1000円枚数',0,500,value = int(list(df_shop['交換率'])[index_shop]))
         push_mai_len = st.number_input('1プッシュ枚数',0,500,value = int(list(df_shop['ワンプッシュ'])[index_shop]))
-        amari_mai_len = st.number_input('余り枚数',0,500,0)
-        push_col1, push_col2 = st.columns(2)
-        with push_col1:
-            genkin_push_number = st.number_input('現金プッシュ回数',0,100)
-        with push_col2:
-            medal_push_number = st.number_input('持ちメダルプッシュ回数',0,100,1)
             
         endG_col1, endG_col2 = st.columns(2)
         with endG_col1:
@@ -106,7 +108,7 @@ if yugi:
             
             index = int(list(df.index)[-1])
             
-            toushi_medal = (push_mai_len*genkin_push_number) + (push_mai_len*medal_push_number) + amari_mai_len
+            toushi_medal = (push_mai_len*st.session_state.genkin_push_number) + (push_mai_len*st.session_state.medal_push_number) + st.session_state.amari_mai_len
             
             df.loc[index,'当選G数'] = tousen_game_len
             df.loc[index,'ヤメG数'] = yame_game_len
@@ -114,13 +116,13 @@ if yugi:
             
             one_mai = 1000 / sen_mai_len
             if one_mai >= 20:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*20) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*20) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 20>one_mai>=10:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*10) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*10) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 10>one_mai>=5:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*5) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*5) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 5>one_mai>=2:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*2) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*2) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             
             set_with_dataframe(sh, df, include_index = False)
             now = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
@@ -129,7 +131,7 @@ if yugi:
             st.text('登録完了')
 
 
-if end:
+with st.expander("結果"):
     st.header('結果')
     with st.form(key='kekka_form'):
         index = int(list(df.index)[-1])

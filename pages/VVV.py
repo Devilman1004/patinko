@@ -7,9 +7,7 @@ st.text('https://note.com/zema/n/ncf5ff14fe77b')
 
 st.header('期待値')
 
-data_wich = st.selectbox('打ち始めor打ち終わり',('打ち始め','打ち終わり'))
-
-if data_wich == '打ち始め':
+with st.expander("打ち始め"):
     data_type = st.selectbox('データ表示機タイプ',('ART表示あり','ART表示なし'))
 
     if data_type == 'ART表示なし' :
@@ -94,8 +92,7 @@ if data_wich == '打ち始め':
             st.subheader('RB 3スルー・CZ 0スルー 期待値表')
             st.image("https://assets.st-note.com/img/1671052429399-EA20yiRD1e.png?width=600", use_column_width=True)
                                             
-elif data_wich == '打ち終わり':
-    
+with st.expander("打ち終わり"):
     st.text('打つ場合は画面上部の紫のモヤモヤがなくなるまで！！')
     
     hikimodoshi_type = st.selectbox('最後の当たり',('CZ後','RB後','BB単発後','革命ラッシュBB2連~4連以下後','超革命ラッシュBB4連以上後'))
