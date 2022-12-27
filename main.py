@@ -19,9 +19,11 @@ workbook = gc.open('収支表')
 sh = workbook.worksheet('収支')
 sh_shop = workbook.worksheet('店一覧')
 sh_slot = workbook.worksheet('スロット機種一覧')
+sh_hozon = workbook.worksheet('データ保存用')
 df = pd.DataFrame(sh.get_all_values()[1:], columns = sh.get_all_values()[0])
 df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns = sh_shop.get_all_values()[0])
 df_slot = pd.DataFrame(sh_slot.get_all_values()[1:], columns = sh_slot.get_all_values()[0])
+df_hozon = pd.DataFrame(sh_hozon.get_all_values()[1:], columns=sh_hozon.get_all_values()[0])
 
 st.title('期待値稼働')
 
@@ -74,12 +76,9 @@ with st.expander("遊技中"):
     
     st.header('遊技中')
     
-    if 'amari_mai_len' not in st.session_state:
-        st.session_state.amari_mai_len = 0
-    if 'genkin_push_number' not in st.session_state:
-        st.session_state.genkin_push_number = 0
-    if 'medal_push_number' not in st.session_state:
-        st.session_state.medal_push_number = 0
+    st.session_state.amari_mai_len = int(df_hozon.loc[2,'数値'])
+    st.session_state.genkin_push_number = int(df_hozon.loc[0,'数値'])
+    st.session_state.medal_push_number = int(df_hozon.loc[1,'数値'])
     
     push_col1, push_col2 = st.columns(2)
     with push_col1:
@@ -87,6 +86,11 @@ with st.expander("遊技中"):
     with push_col2:
         st.session_state.medal_push_number = st.number_input('持ちメダルプッシュ回数',0,100,st.session_state.medal_push_number)
     st.session_state.amari_mai_len = st.number_input('余り枚数',0,500,st.session_state.amari_mai_len)
+    
+    df_hozon.loc[2,'数値'] = st.session_state.amari_mai_len
+    df_hozon.loc[0,'数値'] = st.session_state.genkin_push_number
+    df_hozon.loc[1,'数値'] = st.session_state.medal_push_number
+    set_with_dataframe(sh_hozon, df_hozon, include_index = False)
     
     with st.form(key='yugi_form'):
         index = int(list(df.index)[-1])

@@ -38,3 +38,7 @@ if kaitenritsu_button:
     my_kaitenritsu = my_kaiten_len / st.session_state.push_len
     st.text('回転数:' + str(my_kaiten_len))
     st.text('回転率:' + str(my_kaitenritsu))
+    
+st.subheader('※注意書き')
+st.text('1 打ち始めの回転数を入れる')
+st.text('2 ワンプッシュ分打ち終わったら現在の回転数とプッシュを１回追加')
