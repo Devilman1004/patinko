@@ -1,29 +1,36 @@
 import streamlit as st
 import gspread
 import pandas as pd
+import time
 #ServiceAccountCredentials：Googleの各サービスへアクセスできるservice変数を生成します。
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 from gspread_dataframe import set_with_dataframe
+from gspread.exceptions import APIError
 
-#2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-json_path = 'kitaichi-fd2dd716665b.json'
-#認証情報設定
-#ダウンロードしたjsonファイル名をクレデンシャル変数に設定（秘密鍵、Pythonファイルから読み込みしやすい位置に置く）
-credentials = ServiceAccountCredentials.from_json_keyfile_name(json_path, scope)
-#OAuth2の資格情報を使用してGoogle APIにログインします。
-gc = gspread.authorize(credentials)
-# １．ファイル名を指定してワークブックを選択
-workbook = gc.open('収支表')
-sh = workbook.worksheet('収支')
-sh_shop = workbook.worksheet('店一覧')
-sh_slot = workbook.worksheet('スロット機種一覧')
-sh_hozon = workbook.worksheet('データ保存用')
-df = pd.DataFrame(sh.get_all_values()[1:], columns = sh.get_all_values()[0])
-df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns = sh_shop.get_all_values()[0])
-df_slot = pd.DataFrame(sh_slot.get_all_values()[1:], columns = sh_slot.get_all_values()[0])
-df_hozon = pd.DataFrame(sh_hozon.get_all_values()[1:], columns=sh_hozon.get_all_values()[0])
+while True:
+    try:
+        #2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
+        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+        json_path = 'kitaichi-fd2dd716665b.json'
+        #認証情報設定
+        #ダウンロードしたjsonファイル名をクレデンシャル変数に設定（秘密鍵、Pythonファイルから読み込みしやすい位置に置く）
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(json_path, scope)
+        #OAuth2の資格情報を使用してGoogle APIにログインします。
+        gc = gspread.authorize(credentials)
+        # １．ファイル名を指定してワークブックを選択
+        workbook = gc.open('収支表')
+        sh = workbook.worksheet('収支')
+        sh_shop = workbook.worksheet('店一覧')
+        sh_slot = workbook.worksheet('スロット機種一覧')
+        sh_hozon = workbook.worksheet('データ保存用')
+        df = pd.DataFrame(sh.get_all_values()[1:], columns = sh.get_all_values()[0])
+        df_shop = pd.DataFrame(sh_shop.get_all_values()[1:], columns = sh_shop.get_all_values()[0])
+        df_slot = pd.DataFrame(sh_slot.get_all_values()[1:], columns = sh_slot.get_all_values()[0])
+        df_hozon = pd.DataFrame(sh_hozon.get_all_values()[1:], columns=sh_hozon.get_all_values()[0])
+        break
+    except APIError:
+        time.sleep(1)
 
 st.title('期待値稼働')
 
@@ -159,10 +166,10 @@ with st.expander("結果"):
             df.loc[index,'回収金額'] = (100/hyaku_mai_len)*kaisyu_medal
             df.loc[index,'終了時間'] = end_time
             
-            toushi_money = int(df.at[index,'投資金額'])
-            toushi_medal = int(df.at[index,'投資メダル枚数'])
-            kaisyuu_money = int(df.at[index,'回収金額'])
-            kaisyuu_medal = int(df.at[index,'回収メダル枚数'])
+            toushi_money = float(df.at[index,'投資金額'])
+            toushi_medal = float(df.at[index,'投資メダル枚数'])
+            kaisyuu_money = float(df.at[index,'回収金額'])
+            kaisyuu_medal = float(df.at[index,'回収メダル枚数'])
             
             syushi_medal = kaisyu_medal - toushi_medal
             syushi_money = kaisyuu_money - toushi_money
@@ -173,4 +180,10 @@ with st.expander("結果"):
             set_with_dataframe(sh, df, include_index = False)
 
             st.dataframe(df[df['年月日'] == day.strftime('%Y-%m-%d')])
+
+            df_hozon.loc[2,'数値'] = 0
+            df_hozon.loc[0,'数値'] = 0
+            df_hozon.loc[1,'数値'] = 0
+            set_with_dataframe(sh_hozon, df_hozon, include_index = False)
+            
             st.text('登録完了')
