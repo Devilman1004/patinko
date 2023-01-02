@@ -83,20 +83,47 @@ with st.expander("遊技中"):
     
     st.header('遊技中')
     
-    before_amari_mai_len = int(df_hozon.loc[2,'数値'])
-    before_genkin_push_number = int(df_hozon.loc[0,'数値'])
-    before_medal_push_number = int(df_hozon.loc[1,'数値'])
+    if 'amari_mai_len' not in st.session_state:
+        before_amari_mai_len = int(df_hozon.loc[2,'数値'])
+    else:
+        before_amari_mai_len = st.session_state.amari_mai_len
+
+    if 'genkin_push_number' not in st.session_state:
+        before_genkin_push_number = int(df_hozon.loc[0,'数値'])
+    else:
+        before_genkin_push_number = st.session_state.genkin_push_number
+    
+    if 'medal_push_number' not in st.session_state:
+        before_medal_push_number = int(df_hozon.loc[1,'数値'])
+    else:
+        before_medal_push_number = st.session_state.medal_push_number    
     
     push_col1, push_col2 = st.columns(2)
     with push_col1:
-        genkin_push_number = st.number_input('現金プッシュ回数',0,100,before_genkin_push_number)
+        st.session_state.genkin_push_number = st.number_input('現金プッシュ回数',0,100,before_genkin_push_number)
     with push_col2:
-        medal_push_number = st.number_input('持ちメダルプッシュ回数',0,100,before_medal_push_number)
-    amari_mai_len = st.number_input('余り枚数',0,500,before_amari_mai_len)
+        st.session_state.medal_push_number = st.number_input('持ちメダルプッシュ回数',0,100,before_medal_push_number)
+    st.session_state.amari_mai_len = st.number_input('余り枚数',0,500,before_amari_mai_len)
     
-    df_hozon.loc[2,'数値'] = amari_mai_len
-    df_hozon.loc[0,'数値'] = genkin_push_number
-    df_hozon.loc[1,'数値'] = medal_push_number
+    st.text('現金プッシュ回数')
+    st.text(st.session_state.genkin_push_number)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button('プラス1'):
+            st.session_state.medal_push_number += 1
+    with col2:
+        if st.button('プラス2'):
+            st.session_state.medal_push_number += 2
+    
+    st.text('持ちメダルプッシュ回数')
+    st.text(st.session_state.medal_push_number)
+    st.text('余りメダル枚数')
+    st.text(st.session_state.amari_mai_len)
+    
+    df_hozon.loc[2,'数値'] = st.session_state.amari_mai_len
+    df_hozon.loc[0,'数値'] = st.session_state.genkin_push_number
+    df_hozon.loc[1,'数値'] = st.session_state.medal_push_number
     set_with_dataframe(sh_hozon, df_hozon, include_index = False)
     
     with st.form(key='yugi_form'):
@@ -119,7 +146,7 @@ with st.expander("遊技中"):
             
             index = int(list(df.index)[-1])
             
-            toushi_medal = (push_mai_len*genkin_push_number) + (push_mai_len*medal_push_number) + amari_mai_len
+            toushi_medal = (push_mai_len*st.session_state.genkin_push_number) + (push_mai_len*st.session_state.medal_push_number) + st.session_state.amari_mai_len
             
             df.loc[index,'当選G数'] = tousen_game_len
             df.loc[index,'ヤメG数'] = yame_game_len
@@ -127,13 +154,13 @@ with st.expander("遊技中"):
             
             one_mai = 1000 / sen_mai_len
             if one_mai >= 20:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*20) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*20) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 20>one_mai>=10:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*10) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*10) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 10>one_mai>=5:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*5) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*5) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             elif 5>one_mai>=2:
-                df.loc[index,'投資金額'] = (push_mai_len*medal_push_number*2) + (push_mai_len*genkin_push_number*one_mai)
+                df.loc[index,'投資金額'] = (push_mai_len*st.session_state.medal_push_number*2) + (push_mai_len*st.session_state.genkin_push_number*one_mai)
             
             set_with_dataframe(sh, df, include_index = False)
             now = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
